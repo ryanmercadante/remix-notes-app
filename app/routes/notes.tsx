@@ -1,7 +1,12 @@
+import type { LinksFunction } from "@remix-run/node";
+import NewNote, { links as newNoteLinks } from "~/components/NewNote";
+
 export default function NotesPage() {
   return (
     <main>
-      <h1>My Notes</h1>
+      <NewNote />
     </main>
   );
 }
+
+export const links: LinksFunction = () => [...newNoteLinks()];
