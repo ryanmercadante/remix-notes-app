@@ -1,10 +1,11 @@
 import type {
   ActionFunction,
+  ErrorBoundaryComponent,
   LinksFunction,
   LoaderFunction,
 } from "@remix-run/node";
 import { redirect, json } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
+import { Link, useLoaderData } from "@remix-run/react";
 import NewNote, { links as newNoteLinks } from "~/components/NewNote";
 import NoteList, { links as noteListLinks } from "~/components/NoteList";
 import type { Note } from "~/data/notes";
@@ -69,3 +70,15 @@ export const links: LinksFunction = () => [
   ...newNoteLinks(),
   ...noteListLinks(),
 ];
+
+export const ErrorBoundary: ErrorBoundaryComponent = ({ error }) => {
+  return (
+    <main className="error">
+      <h1>An error related to your notes occured!</h1>
+      <p>{error.message}</p>
+      <p>
+        Back to <Link to="/">safety</Link>!
+      </p>
+    </main>
+  );
+};
