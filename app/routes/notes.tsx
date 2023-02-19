@@ -14,13 +14,20 @@ type LoaderData = {
   notes: Array<Note>;
 };
 
+export type ActionData = {
+  errors?: {
+    title?: string;
+    content?: string;
+  };
+};
+
 export default function NotesPage() {
-  const data = useLoaderData() as LoaderData;
+  const { notes } = useLoaderData() as LoaderData;
 
   return (
     <main>
       <NewNote />
-      <NoteList notes={data.notes} />
+      <NoteList notes={notes} />
     </main>
   );
 }
@@ -32,11 +39,28 @@ export const loader: LoaderFunction = async () => {
 
 export const action: ActionFunction = async ({ request }) => {
   const formData = await request.formData();
-  const noteData = Object.fromEntries(formData);
-  // Add validation...
+  const id = new Date().toISOString();
+  const title = formData.get("title");
+  const content = formData.get("content");
+
+  if (typeof title !== "string" || title.trim().length < 3) {
+    return json<ActionData>(
+      { errors: { title: "Title must be at least 3 characters long" } },
+      { status: 400 }
+    );
+  }
+
+  if (typeof content !== "string" || content.trim().length < 3) {
+    return json<ActionData>(
+      { errors: { content: "Content must be at least 3 characters long" } },
+      { status: 400 }
+    );
+  }
+
+  const note: Note = { id, title, content };
+
   const existingNotes = await getStoredNotes();
-  noteData.id = new Date().toISOString();
-  const updatedNotes = existingNotes.concat(noteData as Note);
+  const updatedNotes = existingNotes.concat(note);
   await storeNotes(updatedNotes);
   return redirect("/notes");
 };
