@@ -14,7 +14,7 @@ function NewNote() {
         <textarea name="content" id="content" rows={5} required />
       </p>
       <div className="form-actions">
-        <button>Add note</button>
+        <button type="submit">Add note</button>
       </div>
     </form>
   );
