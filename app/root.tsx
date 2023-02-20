@@ -4,6 +4,7 @@ import type {
   MetaFunction,
 } from "@remix-run/node";
 import {
+  CatchBoundaryComponent,
   Link,
   Links,
   LiveReload,
@@ -11,6 +12,7 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  useCatch,
 } from "@remix-run/react";
 import MainNavigation from "~/components/MainNavigation";
 
@@ -41,6 +43,36 @@ export default function App() {
     </html>
   );
 }
+
+export const CatchBoundary: CatchBoundaryComponent = () => {
+  const caughtResponse = useCatch();
+  const message = caughtResponse?.data?.message || "Something went wrong.";
+
+  return (
+    <html lang="en">
+      <head>
+        <Meta />
+        <Links />
+        <title>{caughtResponse.statusText}</title>
+      </head>
+      <body>
+        <header>
+          <MainNavigation />
+        </header>
+        <main className="error">
+          <h1>{caughtResponse.statusText}</h1>
+          <p>{message}</p>
+          <p>
+            Back to <Link to="/">safety</Link>!
+          </p>
+        </main>
+        <ScrollRestoration />
+        <Scripts />
+        <LiveReload />
+      </body>
+    </html>
+  );
+};
 
 export const ErrorBoundary: ErrorBoundaryComponent = ({ error }) => {
   return (
