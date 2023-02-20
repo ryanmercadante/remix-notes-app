@@ -16,6 +16,10 @@ type LoaderData = {
   notes: Array<Note>;
 };
 
+type LoaderDataNotFound = {
+  message: string;
+};
+
 export type ActionData = {
   errors?: {
     title?: string;
@@ -37,7 +41,7 @@ export default function NotesPage() {
 export const loader: LoaderFunction = async () => {
   const notes = await getStoredNotes();
   if (!notes || notes.length === 0) {
-    throw json(
+    throw json<LoaderDataNotFound>(
       { message: "Could not find any notes." },
       { status: 404, statusText: "Not found" }
     );

@@ -10,6 +10,10 @@ type LoaderData = {
   note: Note;
 };
 
+type LoaderDataNotFound = {
+  message: string;
+};
+
 export default function NoteDetailsPage() {
   const data = useLoaderData() as LoaderData;
 
@@ -29,7 +33,13 @@ export default function NoteDetailsPage() {
 export const loader: LoaderFunction = async ({ params }) => {
   const notes = await getStoredNotes();
   const selectedNote = notes.find((n) => n.id === params.noteId);
-  return json<LoaderData>({ note: selectedNote! });
+  if (!selectedNote) {
+    throw json<LoaderDataNotFound>(
+      { message: `Could not find note with id ${params.noteId}` },
+      { status: 404, statusText: "Note not found." }
+    );
+  }
+  return json<LoaderData>({ note: selectedNote });
 };
 
 export const links: LinksFunction = () => [{ rel: "stylesheet", href: styles }];

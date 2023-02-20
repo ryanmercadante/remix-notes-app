@@ -3,8 +3,8 @@ import type {
   LinksFunction,
   MetaFunction,
 } from "@remix-run/node";
+import type { CatchBoundaryComponent } from "@remix-run/react";
 import {
-  CatchBoundaryComponent,
   Link,
   Links,
   LiveReload,
