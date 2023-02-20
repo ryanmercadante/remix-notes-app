@@ -1,4 +1,8 @@
-import type { LinksFunction, LoaderFunction } from "@remix-run/node";
+import type {
+  LinksFunction,
+  LoaderFunction,
+  MetaFunction,
+} from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
 import type { Note } from "~/data/notes";
@@ -43,3 +47,10 @@ export const loader: LoaderFunction = async ({ params }) => {
 };
 
 export const links: LinksFunction = () => [{ rel: "stylesheet", href: styles }];
+
+export const meta: MetaFunction = ({ data }) => {
+  return {
+    title: `Notes | ${data.note.title}`,
+    description: data.note.content,
+  };
+};

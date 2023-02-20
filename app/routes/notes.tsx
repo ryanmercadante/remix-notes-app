@@ -3,6 +3,7 @@ import type {
   ErrorBoundaryComponent,
   LinksFunction,
   LoaderFunction,
+  MetaFunction,
 } from "@remix-run/node";
 import { redirect, json } from "@remix-run/node";
 import type { CatchBoundaryComponent } from "@remix-run/react";
@@ -81,6 +82,13 @@ export const links: LinksFunction = () => [
   ...newNoteLinks(),
   ...noteListLinks(),
 ];
+
+export const meta: MetaFunction = () => {
+  return {
+    title: "All Notes",
+    description: "Manage your notes with ease.",
+  };
+};
 
 export const CatchBoundary: CatchBoundaryComponent = () => {
   const caughtResponse = useCatch();
